@@ -17,7 +17,6 @@ public class CompanyController {
     public Page<Company> getCompaniesByPages(@RequestParam int page, @RequestParam int size) {
         List<Company> companies = new ArrayList<>(companyDB.values());
         int totalCount = companies.size();
-
         int startIndex = (page - 1) * size;
         if (startIndex >= totalCount) {
             return new Page<>(page, size, totalCount, Collections.emptyList());
@@ -25,7 +24,7 @@ public class CompanyController {
 
         int endIndex = Math.min(startIndex + size, totalCount);
         List<Company> pageCompanies = new ArrayList<>(companies.subList(startIndex, endIndex));
-
+        
         return new Page<>(page, size, totalCount, pageCompanies);
     }
 

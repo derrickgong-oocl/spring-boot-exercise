@@ -48,9 +48,7 @@ public class EmployeeController {
         }
 
         int endIndex = Math.min(startIndex + size, totalCount);
-
         List<Employee> pageEmployees = new ArrayList<>(allEmployees.subList(startIndex, endIndex));
-
         return new Page<>(page, size, totalCount, pageEmployees);
     }
 
