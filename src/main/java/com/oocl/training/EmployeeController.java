@@ -24,7 +24,7 @@ public class EmployeeController {
         return new ArrayList<>(employeeDB.values());
     }
 
-    @GetMapping
+    @GetMapping("/gender")
     public List<Employee> getEmployeeByGender(@PathVariable String gender) {
         List<Employee> employees = new ArrayList<>(employeeDB.values());
         List<Employee> result = new ArrayList<>();

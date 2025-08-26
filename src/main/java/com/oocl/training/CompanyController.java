@@ -13,7 +13,8 @@ import java.util.*;
 public class CompanyController {
     private final Map<Integer, Company> companyDB = new HashMap<>();
 
-    @GetMapping
+
+    @GetMapping("/page")
     public Page<Company> getCompaniesByPages(@RequestParam int page, @RequestParam int size) {
         List<Company> companies = new ArrayList<>(companyDB.values());
         int totalCount = companies.size();
@@ -24,7 +25,7 @@ public class CompanyController {
 
         int endIndex = Math.min(startIndex + size, totalCount);
         List<Company> pageCompanies = new ArrayList<>(companies.subList(startIndex, endIndex));
-        
+
         return new Page<>(page, size, totalCount, pageCompanies);
     }
 
