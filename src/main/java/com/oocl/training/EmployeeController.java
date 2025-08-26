@@ -20,7 +20,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getEmployeeList(@PathVariable("id") int id) {
+    public List<Employee> getEmployeeList() {
         return new ArrayList<>(employeeDB.values());
     }
 
