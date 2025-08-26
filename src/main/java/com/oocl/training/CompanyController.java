@@ -1,6 +1,7 @@
 package com.oocl.training;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -56,19 +57,26 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompanyName(@PathVariable Integer id, @RequestBody Map<String, String> request) {
-        Company company = companyDB.get(id);
-        if (company != null) {
-            company.setName(request.get("name"));
-            companyDB.put(id, company);
+    public ResponseEntity updateCompanyName(@PathVariable Integer id, @RequestBody Map<String, String> request) {
+        Company existingCompany = companyDB.get(id);
+        if (existingCompany != null) {
+            existingCompany.setName(request.get("name"));
+            companyDB.put(id, existingCompany);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return company;
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompany(@PathVariable Integer id) {
-        companyDB.remove(id);
+    public ResponseEntity deleteCompany(@PathVariable Integer id) {
+        if (companyDB.containsKey(id)) {
+            companyDB.remove(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

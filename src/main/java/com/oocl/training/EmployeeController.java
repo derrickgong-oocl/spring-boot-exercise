@@ -1,6 +1,7 @@
 package com.oocl.training;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -59,12 +60,17 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable int id) {
-        employeeDB.remove(id);
+    public ResponseEntity deleteEmployee(@PathVariable int id) {
+        if (employeeDB.containsKey(id)) {
+            employeeDB.remove(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable int id, @RequestBody Employee employee) {
+    public ResponseEntity updateEmployee(@PathVariable int id, @RequestBody Employee employee) {
         Employee toUpdate = employeeDB.get(id);
         if(toUpdate != null){
             toUpdate.setGender(employee.getGender());
@@ -72,8 +78,9 @@ public class EmployeeController {
             toUpdate.setName(employee.getName());
             toUpdate.setSalary(employee.getSalary());
             employeeDB.put(id, toUpdate);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return toUpdate;
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
