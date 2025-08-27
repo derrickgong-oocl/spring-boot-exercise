@@ -27,7 +27,17 @@ public class CompanyService {
     }
 
     public Page<Company> getCompaniesByPages(Integer page, Integer size) {
-        return companyRepository.getCompaniesByPages(page, size);
+        List<Company> companies = getCompanies();
+        int totalCount = companies.size();
+        int startIndex = (page - 1) * size;
+        if (startIndex >= totalCount) {
+            return new Page<>(page, size, totalCount, Collections.emptyList());
+        }
+
+        int endIndex = Math.min(startIndex + size, totalCount);
+        List<Company> pageCompanies = new ArrayList<>(companies.subList(startIndex, endIndex));
+
+        return new Page<>(page, size, totalCount, pageCompanies);
     }
 
     public Company getCompanyById(Integer id){

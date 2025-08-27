@@ -25,6 +25,15 @@ public class Employee {
         this.active = active;
     }
 
+    public Employee(String name, int age, String gender, double salary) {
+        this.id = 1;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.salary = salary;
+        this.active = true;
+    }
+
     public Employee() {
 
     }

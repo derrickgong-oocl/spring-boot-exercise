@@ -29,15 +29,33 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeeByGender(String gender) {
-        return employeeRepository.getEmployeeByGender(gender);
+        List<Employee> employees = getEmployeeList();
+        List<Employee> result = new ArrayList<>();
+        if (gender != null) {
+            for (Employee employee : employees) {
+                if (gender.equals(employee.getGender())) {
+                    result.add(employee);
+                }
+            }
+        }
+        return result;
     }
 
 
     public Page<Employee> getEmployeesByPage(Integer page, Integer size) {
-        return employeeRepository.getEmployeesByPage(page, size);
+        List<Employee> allEmployees = getEmployeeList();
+        int totalCount = allEmployees.size();
+        int startIndex = (page - 1) * size;
+        if (startIndex >= totalCount) {
+            return new Page<>(page, size, totalCount, Collections.emptyList());
+        }
+
+        int endIndex = Math.min(startIndex + size, totalCount);
+        List<Employee> pageEmployees = new ArrayList<>(allEmployees.subList(startIndex, endIndex));
+        return new Page<>(page, size, totalCount, pageEmployees);
     }
 
-    public void addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) {
         if (employee.getAge() < 18 || employee.getAge() > 65) {
             throw new InvalidEmployeeException("Employee age must be between 18 and 65.");
         }
@@ -46,18 +64,31 @@ public class EmployeeService {
             throw new InvalidEmployeeException("Employees over 30 must have salary >= 20000.");
         }
         employee.setActive(true);
-        employeeRepository.addEmployee(employee);
+
+        return employeeRepository.addEmployee(employee);
     }
 
     public boolean deleteEmployee(Integer id) {
-        return employeeRepository.deleteEmployee(id);
+        List<Employee> allEmployees = employeeRepository.getAll();
+        for (Employee employee : allEmployees) {
+            if (employee.getId() == id) {
+                employee.setActive(false);
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean updateEmployee(Integer id, Employee employee) {
         if (!employee.isActive()) {
             throw new InvalidUpdateException("Inactive Employee can not be updated");
         }
-        return employeeRepository.updateEmployee(id, employee);
+
+        boolean updatedEmployee = employeeRepository.updateEmployee(id, employee);
+        if (updatedEmployee) {
+            return true;
+        }
+        return false;
     }
 
 }

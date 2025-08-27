@@ -14,6 +14,7 @@ public class CompanyRepository {
     public CompanyRepository () {
 
     }
+    private Integer companyTotal = 5;
 
     private final HashMap<Integer, Company> companyDB = new HashMap<>(Map.of(
             1, new Company(1, "Acme Corporation", List.of(
@@ -34,19 +35,7 @@ public class CompanyRepository {
         return new ArrayList<>(companyDB.values());
     }
 
-    public Page<Company> getCompaniesByPages(Integer page, Integer size) {
-        List<Company> companies = new ArrayList<>(companyDB.values());
-        int totalCount = companies.size();
-        int startIndex = (page - 1) * size;
-        if (startIndex >= totalCount) {
-            return new Page<>(page, size, totalCount, Collections.emptyList());
-        }
 
-        int endIndex = Math.min(startIndex + size, totalCount);
-        List<Company> pageCompanies = new ArrayList<>(companies.subList(startIndex, endIndex));
-
-        return new Page<>(page, size, totalCount, pageCompanies);
-    }
 
     public Company getCompanyById(Integer id){
         return companyDB.get(id);
@@ -61,8 +50,9 @@ public class CompanyRepository {
     }
 
     public void addCompany(Company company){
-        company.setId(companyDB.size() + 1);
-        companyDB.put(companyDB.size() + 1, company);
+        companyTotal += 1;
+        company.setId(companyTotal);
+        companyDB.put(companyTotal, company);
     }
 
     public boolean updateCompanyName(Integer id, Map<String, String> request) {
@@ -71,10 +61,9 @@ public class CompanyRepository {
             existingCompany.setName(request.get("name"));
             companyDB.put(id, existingCompany);
             return true;
-//            return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return false;
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         }
     }
 
@@ -82,10 +71,8 @@ public class CompanyRepository {
         if (companyDB.containsKey(id)) {
             companyDB.remove(id);
             return true;
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return false;
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

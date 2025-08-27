@@ -11,6 +11,7 @@ import java.util.*;
 @Repository
 public class EmployeeRepository {
 
+    private Integer employee_total = 3;
     public EmployeeRepository () {
 
     }
@@ -28,51 +29,20 @@ public class EmployeeRepository {
         return new ArrayList<>(employeeDB.values());
     }
 
-    public List<Employee> getEmployeeByGender(String gender) {
-        List<Employee> employees = new ArrayList<>(employeeDB.values());
-        List<Employee> result = new ArrayList<>();
-        if (gender != null) {
-            for (Employee employee : employees) {
-                if (gender.equals(employee.getGender())) {
-                    result.add(employee);
-                }
-            }
-        }
-        return result;
+
+
+    public Employee addEmployee(Employee employee) {
+        employee_total += 1;
+        employee.setId(employee_total);
+        employeeDB.put(employee_total, employee);
+        return employee;
     }
 
-    public Page<Employee> getEmployeesByPage(Integer page, Integer size) {
-        List<Employee> allEmployees = new ArrayList<>(employeeDB.values());
-        int totalCount = allEmployees.size();
-        int startIndex = (page - 1) * size;
-        if (startIndex >= totalCount) {
-            return new Page<>(page, size, totalCount, Collections.emptyList());
-        }
 
-        int endIndex = Math.min(startIndex + size, totalCount);
-        List<Employee> pageEmployees = new ArrayList<>(allEmployees.subList(startIndex, endIndex));
-        return new Page<>(page, size, totalCount, pageEmployees);
-    }
-
-    public void addEmployee(Employee employee) {
-        employee.setId(employeeDB.size() + 1);
-        employeeDB.put(employeeDB.size() + 1, employee);
-    }
-
-    public boolean deleteEmployee(Integer id) {
-        if (employeeDB.containsKey(id)) {
-            Employee employee = employeeDB.get(id);
-            employee.setActive(false);
-            employeeDB.remove(id);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public boolean updateEmployee(Integer id, Employee employee) {
         Employee toUpdate = employeeDB.get(id);
-        if (toUpdate != null){
+        if (toUpdate != null) {
             toUpdate.setGender(employee.getGender());
             toUpdate.setAge(employee.getAge());
             toUpdate.setName(employee.getName());
