@@ -84,8 +84,13 @@ public class EmployeeService {
             throw new InvalidUpdateException("Inactive Employee can not be updated");
         }
 
-        boolean updatedEmployee = employeeRepository.updateEmployee(id, employee);
-        if (updatedEmployee) {
+        Employee toUpdate = employeeRepository.get(id);
+        if (toUpdate != null) {
+            toUpdate.setGender(employee.getGender());
+            toUpdate.setAge(employee.getAge());
+            toUpdate.setName(employee.getName());
+            toUpdate.setSalary(employee.getSalary());
+            employeeRepository.updateEmployee(id, toUpdate);
             return true;
         }
         return false;

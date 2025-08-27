@@ -40,17 +40,8 @@ public class EmployeeRepository {
 
 
 
-    public boolean updateEmployee(Integer id, Employee employee) {
-        Employee toUpdate = employeeDB.get(id);
-        if (toUpdate != null) {
-            toUpdate.setGender(employee.getGender());
-            toUpdate.setAge(employee.getAge());
-            toUpdate.setName(employee.getName());
-            toUpdate.setSalary(employee.getSalary());
-            employeeDB.put(id, toUpdate);
-            return true;
-        }
-        return false;
+    public void updateEmployee(Integer id, Employee employee) {
+        employeeDB.put(id, employee);
     }
 
 

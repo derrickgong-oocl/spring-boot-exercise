@@ -71,23 +71,22 @@ class EmployeeServiceTest {
         assertEquals("Inactive Employee can not be updated", invalidUpdateException.getMessage());
     }
 
-//    @Test
-//    void should_throw_exception_when_update_successful() {
-//        Employee employee = new Employee(4, "oocl", 20, "Male", 5000, true);
-//        Employee saved_employee = employeeService.addEmployee(employee);
-//
-//        Employee mockEmployee = new Employee(4, "oocl", 41, "Male", 50000, true);
-//        //Mockito.when(employeeRepository.updateEmployee(4, Mockito.any(Employee.class))).thenReturn(mockEmployee);
-//
-//        System.out.println(saved_employee.getId());
-//        Employee updated_employee = employeeRepository.updateEmployee(4, mockEmployee);
-//
-//        assertEquals(mockEmployee.getAge(), updated_employee.getAge());
-//        assertEquals(mockEmployee.getSalary(), updated_employee.getSalary());
-//        assertEquals(mockEmployee.isActive(), updated_employee.isActive());
-//        assertNotNull(updated_employee.getId());
-//
-//    }
+    @Test
+    void should_throw_exception_when_update_successful() {
+        Employee employee = new Employee(1, "oocl", 20, "Male", 5000, true);
+        Employee mockEmployee = new Employee(1, "John Smith", 32, "Male", 5000.0, true);
+
+        Mockito.when(employeeRepository.get(1)).thenReturn(mockEmployee);
+
+
+        employeeService.updateEmployee(1, employee);
+
+        assertEquals(mockEmployee.getAge(), employee.getAge());
+        assertEquals(mockEmployee.getSalary(), employee.getSalary());
+        assertEquals(mockEmployee.isActive(), employee.isActive());
+        assertNotNull(employee.getId());
+
+    }
 
     @Test
     void shoud_delete_employee_by_id_successfully() {
