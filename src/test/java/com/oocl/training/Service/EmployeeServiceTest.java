@@ -101,7 +101,19 @@ class EmployeeServiceTest {
         verify(employeeRepository, times(1)).getAll();
 
     }
+    @Test
+    void get_employ_by_id_successfully() {
+        Employee employee = new Employee(1, "John Smith", 32, "Male", 5000.0, true);
+        Employee mockEmployee = new Employee(1, "John Smith", 32, "Male", 5000.0, true);
+        Mockito.when(employeeRepository.get(1)).thenReturn(mockEmployee);
 
+        assertEquals(mockEmployee.getName(), employee.getName());
+        assertEquals(mockEmployee.getAge(), employee.getAge());
+        assertEquals(mockEmployee.getSalary(), employee.getSalary());
+        assertEquals(mockEmployee.isActive(), employee.isActive());
+        assertEquals(mockEmployee.getGender(), employee.getGender());
+
+   }
 
 
 
