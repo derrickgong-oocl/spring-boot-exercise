@@ -1,4 +1,4 @@
-package com.oocl.training;
+package com.oocl.training.Entitiy;
 
 public class Todo {
 

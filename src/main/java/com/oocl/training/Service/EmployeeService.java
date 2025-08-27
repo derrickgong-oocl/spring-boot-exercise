@@ -1,32 +1,30 @@
-package com.oocl.training;
+package com.oocl.training.Service;
 
+
+import com.oocl.training.Entitiy.Employee;
+import com.oocl.training.Entitiy.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-
-// post http://localhost:8080/api/v1/employees
-
-@RestController
-@RequestMapping("/api/v1/employees")
-public class EmployeeController {
+@Service
+public class EmployeeService {
     private final Map<Integer, Employee> employeeDB = new HashMap<>();
 
-    @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable int id) {
+    public Employee getEmployeeById(Integer id) {
         return employeeDB.get(id);
     }
 
-    @GetMapping
     public List<Employee> getEmployeeList() {
         return new ArrayList<>(employeeDB.values());
     }
 
-    @GetMapping("/gender")
-    public List<Employee> getEmployeeByGender(@PathVariable String gender) {
+    public List<Employee> getEmployeeByGender(String gender) {
         List<Employee> employees = new ArrayList<>(employeeDB.values());
         List<Employee> result = new ArrayList<>();
         if (gender != null) {
@@ -39,8 +37,7 @@ public class EmployeeController {
         return result;
     }
 
-    @GetMapping("/page")
-    public Page<Employee> getEmployeesByPage(@RequestParam int page, @RequestParam int size) {
+    public Page<Employee> getEmployeesByPage(Integer page, Integer size) {
         List<Employee> allEmployees = new ArrayList<>(employeeDB.values());
         int totalCount = allEmployees.size();
         int startIndex = (page - 1) * size;
@@ -53,14 +50,12 @@ public class EmployeeController {
         return new Page<>(page, size, totalCount, pageEmployees);
     }
 
-    @PostMapping
-    public void addEmployee(@RequestBody Employee employee) {
+    public void addEmployee(Employee employee) {
         employee.setId(employeeDB.size() + 1);
         employeeDB.put(employeeDB.size() + 1, employee);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteEmployee(@PathVariable int id) {
+    public ResponseEntity deleteEmployee(Integer id) {
         if (employeeDB.containsKey(id)) {
             employeeDB.remove(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -69,8 +64,7 @@ public class EmployeeController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateEmployee(@PathVariable int id, @RequestBody Employee employee) {
+    public ResponseEntity updateEmployee(Integer id, Employee employee) {
         Employee toUpdate = employeeDB.get(id);
         if(toUpdate != null){
             toUpdate.setGender(employee.getGender());
@@ -82,6 +76,4 @@ public class EmployeeController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-
 }

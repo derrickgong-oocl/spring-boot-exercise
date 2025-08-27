@@ -1,4 +1,4 @@
-package com.oocl.training;
+package com.oocl.training.Entitiy;
 
 import java.util.List;
 

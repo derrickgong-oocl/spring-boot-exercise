@@ -1,5 +1,6 @@
-package com.oocl.training;
+package com.oocl.training.Controller;
 
+import com.oocl.training.Entitiy.Todo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

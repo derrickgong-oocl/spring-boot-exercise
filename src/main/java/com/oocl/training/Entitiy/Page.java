@@ -1,4 +1,4 @@
-package com.oocl.training;
+package com.oocl.training.Entitiy;
 import java.util.List;
 
 public class Page<T> {
@@ -12,7 +12,7 @@ public class Page<T> {
 
     private List<T> content;
 
-    public Page( long total, int page, int size, List<T> content) {
+    public Page(long total, int page, int size, List<T> content) {
         this.total = total;
         this.content = content;
         this.page = page;
