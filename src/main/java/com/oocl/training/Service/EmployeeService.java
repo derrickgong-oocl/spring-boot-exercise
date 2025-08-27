@@ -3,77 +3,61 @@ package com.oocl.training.Service;
 
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.oocl.training.Repository.EmployeeRepository;
+import com.oocl.training.exception.InvalidEmployeeException;
+import com.oocl.training.exception.InvalidUpdateException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.*;
 
 @Service
 public class EmployeeService {
-    private final Map<Integer, Employee> employeeDB = new HashMap<>();
+
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     public Employee getEmployeeById(Integer id) {
-        return employeeDB.get(id);
+        return employeeRepository.get(id);
     }
 
     public List<Employee> getEmployeeList() {
-        return new ArrayList<>(employeeDB.values());
+        return employeeRepository.getAll();
     }
 
     public List<Employee> getEmployeeByGender(String gender) {
-        List<Employee> employees = new ArrayList<>(employeeDB.values());
-        List<Employee> result = new ArrayList<>();
-        if (gender != null) {
-            for (Employee employee : employees) {
-                if (gender.equals(employee.getGender())) {
-                    result.add(employee);
-                }
-            }
-        }
-        return result;
+        return employeeRepository.getEmployeeByGender(gender);
     }
 
-    public Page<Employee> getEmployeesByPage(Integer page, Integer size) {
-        List<Employee> allEmployees = new ArrayList<>(employeeDB.values());
-        int totalCount = allEmployees.size();
-        int startIndex = (page - 1) * size;
-        if (startIndex >= totalCount) {
-            return new Page<>(page, size, totalCount, Collections.emptyList());
-        }
 
-        int endIndex = Math.min(startIndex + size, totalCount);
-        List<Employee> pageEmployees = new ArrayList<>(allEmployees.subList(startIndex, endIndex));
-        return new Page<>(page, size, totalCount, pageEmployees);
+    public Page<Employee> getEmployeesByPage(Integer page, Integer size) {
+        return employeeRepository.getEmployeesByPage(page, size);
     }
 
     public void addEmployee(Employee employee) {
-        employee.setId(employeeDB.size() + 1);
-        employeeDB.put(employeeDB.size() + 1, employee);
+        if (employee.getAge() < 18 || employee.getAge() > 65) {
+            throw new InvalidEmployeeException("Employee age must be between 18 and 65.");
+        }
+
+        if (employee.getAge() >= 30 && employee.getSalary() < 20000) {
+            throw new InvalidEmployeeException("Employees over 30 must have salary >= 20000.");
+        }
+        employee.setActive(true);
+        employeeRepository.addEmployee(employee);
     }
 
-    public ResponseEntity deleteEmployee(Integer id) {
-        if (employeeDB.containsKey(id)) {
-            employeeDB.remove(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public boolean deleteEmployee(Integer id) {
+        return employeeRepository.deleteEmployee(id);
     }
 
-    public ResponseEntity updateEmployee(Integer id, Employee employee) {
-        Employee toUpdate = employeeDB.get(id);
-        if(toUpdate != null){
-            toUpdate.setGender(employee.getGender());
-            toUpdate.setAge(employee.getAge());
-            toUpdate.setName(employee.getName());
-            toUpdate.setSalary(employee.getSalary());
-            employeeDB.put(id, toUpdate);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public boolean updateEmployee(Integer id, Employee employee) {
+        if (!employee.isActive()) {
+            throw new InvalidUpdateException("Inactive Employee can not be updated");
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return employeeRepository.updateEmployee(id, employee);
     }
+
 }

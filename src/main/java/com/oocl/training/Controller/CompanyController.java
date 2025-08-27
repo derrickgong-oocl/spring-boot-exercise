@@ -3,6 +3,7 @@ package com.oocl.training.Controller;
 import com.oocl.training.Entitiy.Company;
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
+import com.oocl.training.Repository.CompanyRepository;
 import com.oocl.training.Service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,11 @@ import java.util.*;
 
 public class CompanyController {
 
-    CompanyService companyService = new CompanyService();
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
 
 
 
@@ -48,14 +53,24 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateCompanyName(@PathVariable Integer id, @RequestBody Map<String, String> request) {
-        return companyService.updateCompanyName(id, request);
+    public ResponseEntity<Void> updateCompanyName(@PathVariable Integer id, @RequestBody Map<String, String> request) {
+        boolean response = companyService.updateCompanyName(id, request);
+        if (response) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity deleteCompany(@PathVariable Integer id) {
-        return companyService.deleteCompany(id);
+    public ResponseEntity<Void> deleteCompany(@PathVariable Integer id) {
+        boolean response = companyService.deleteCompany(id);
+        if (response) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

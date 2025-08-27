@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.PresentationDirection;
 import java.util.*;
 
 
@@ -17,7 +18,11 @@ import java.util.*;
 public class EmployeeController {
 
 
-    EmployeeService employeeService = new EmployeeService();
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @GetMapping("/{id}")
     public Employee getEmployeeById(@PathVariable Integer id) {
@@ -45,13 +50,23 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteEmployee(@PathVariable int id) {
-        return employeeService.deleteEmployee(id);
+    public ResponseEntity<Void> deleteEmployee(@PathVariable int id) {
+        boolean response = employeeService.deleteEmployee(id);
+        if (response) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
-        return  employeeService.updateEmployee(id, employee);
+    public ResponseEntity<Void> updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
+        boolean response = employeeService.updateEmployee(id, employee);
+        if (response) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
