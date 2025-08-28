@@ -45,4 +45,7 @@ public class EmployeeRepository {
     }
 
 
+    public void clear() {
+        employeeDB.clear();
+    }
 }

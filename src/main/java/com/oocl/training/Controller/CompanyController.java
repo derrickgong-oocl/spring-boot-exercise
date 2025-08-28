@@ -3,7 +3,6 @@ package com.oocl.training.Controller;
 import com.oocl.training.Entitiy.Company;
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
-import com.oocl.training.Repository.CompanyRepository;
 import com.oocl.training.Service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
