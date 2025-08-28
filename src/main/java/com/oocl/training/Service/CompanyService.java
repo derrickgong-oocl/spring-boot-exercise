@@ -3,11 +3,9 @@ package com.oocl.training.Service;
 import com.oocl.training.Entitiy.Company;
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
-import com.oocl.training.Repository.CompanyRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.oocl.training.Repository.CompanyDbRepository;
+import com.oocl.training.Repository.CompanyMemoryRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 import java.util.*;
@@ -16,9 +14,9 @@ import java.util.*;
 public class CompanyService {
 
 
-    private final CompanyRepository companyRepository;
+    private final CompanyDbRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyDbRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
 

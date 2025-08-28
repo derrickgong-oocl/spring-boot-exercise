@@ -3,6 +3,8 @@ package com.oocl.training.Service;
 
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
+import com.oocl.training.Repository.EmployeeDbRepository;
+import com.oocl.training.Repository.EmployeeMemoryRepository;
 import com.oocl.training.Repository.EmployeeRepository;
 import com.oocl.training.exception.InvalidEmployeeException;
 import com.oocl.training.exception.InvalidUpdateException;
@@ -16,8 +18,8 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeService(EmployeeDbRepository employeeDbRepository) {
+        this.employeeRepository = employeeDbRepository;
     }
 
     public Employee getEmployeeById(Integer id) {
@@ -29,7 +31,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeeByGender(String gender) {
-        List<Employee> employees = getEmployeeList();
+        List<Employee> employees = employeeRepository.getAll();
         List<Employee> result = new ArrayList<>();
         if (gender != null) {
             for (Employee employee : employees) {

@@ -1,10 +1,18 @@
 package com.oocl.training.Entitiy;
 
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
+@Table(name = "companies")
 public class Company {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    @Transient
     private List<Employee> employees;
 
     public Company(int id, String name, List<Employee> employees) {
@@ -14,7 +22,7 @@ public class Company {
     }
 
     public List<Employee> getEmployees() {
-        return employees;
+       return employees;
     }
 
     public void setEmployees(List<Employee> employees) {

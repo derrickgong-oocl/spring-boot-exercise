@@ -1,51 +1,19 @@
 package com.oocl.training.Repository;
 
+
 import com.oocl.training.Entitiy.Employee;
-import com.oocl.training.Entitiy.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Repository
-public class EmployeeRepository {
+public interface EmployeeRepository {
+    Employee get(Integer id);
 
-    private Integer employee_total = 3;
-    public EmployeeRepository () {
+    List<Employee> getAll();
 
-    }
-    private final Map<Integer, Employee> employeeDB = new HashMap<>(Map.of(1, new Employee(1, "John Smith", 32, "Male", 5000.0, true),
-            2, new Employee(2, "Jane Johnson", 28, "Female", 6000.0, true),
-            3, new Employee(3, "David Williams", 35, "Male", 5500.0, true)
-    ));
+    Employee addEmployee(Employee employee);
 
+    void updateEmployee(Integer id, Employee employee);
 
-    public Employee get(Integer id) {
-        return employeeDB.get(id);
-    }
-
-    public List<Employee> getAll() {
-        return new ArrayList<>(employeeDB.values());
-    }
-
-
-
-    public Employee addEmployee(Employee employee) {
-        employee_total += 1;
-        employee.setId(employee_total);
-        employeeDB.put(employee_total, employee);
-        return employee;
-    }
-
-
-
-    public void updateEmployee(Integer id, Employee employee) {
-        employeeDB.put(id, employee);
-    }
-
-
-    public void clear() {
-        employeeDB.clear();
-    }
+    void deleteEmployee(Integer id);
 }

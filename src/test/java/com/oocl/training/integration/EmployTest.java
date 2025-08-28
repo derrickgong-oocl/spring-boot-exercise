@@ -2,7 +2,8 @@ package com.oocl.training.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.training.Entitiy.Employee;
-import com.oocl.training.Repository.EmployeeRepository;
+import com.oocl.training.Repository.EmployeeDbRepository;
+import com.oocl.training.Repository.EmployeeMemoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -25,7 +25,7 @@ public class EmployTest {
     private MockMvc client;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeDbRepository employeeRepository;
 
     @BeforeEach
     public void setup() {
@@ -54,12 +54,10 @@ public class EmployTest {
 
 
     @Test
-    public void should_return_employees_when_get_id_employee_exist() throws Exception {
+    public void should_return_employee_when_get_id_employee_exist() throws Exception {
         List<Employee> givenEmployees = employeeRepository.getAll();
 
         ResultActions perform = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/1"));
-
-
 
 
         perform.andExpect(MockMvcResultMatchers.status().isOk());
@@ -80,8 +78,6 @@ public class EmployTest {
         perform.andExpect(MockMvcResultMatchers.status().isOk());
 
 
-
-
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].gender").value(givenEmployees.get(0).getGender()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[1].gender").value(givenEmployees.get(2).getGender()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[2].gender").value(givenEmployees.get(4).getGender()));
@@ -91,14 +87,12 @@ public class EmployTest {
 
     @Test
     public void post_employees_should_create_successfully() throws Exception {
-
         List<Employee> givenEmployees = employeeRepository.getAll();
         Employee newEmployee = new Employee(6, "Michael", 40, "Male", 70000.0, true);
         givenEmployees.add(newEmployee);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // 发送 POST 请求
         ResultActions perform = client.perform(MockMvcRequestBuilders
                         .post("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,22 +106,15 @@ public class EmployTest {
 
     @Test
     public void delete_employees_by_id_successful() throws Exception {
-        List<Employee> givenEmployees = employeeRepository.getAll();
-
         ResultActions perform = client.perform(MockMvcRequestBuilders.delete("/api/v1/employees/1"));
 
         perform.andExpect(MockMvcResultMatchers.status().isNoContent());
-
-
         ResultActions perform_second = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/1"));
         perform_second.andExpect(MockMvcResultMatchers.jsonPath("$.active").value(false));
     }
 
     @Test
     public void put_employees_by_id_successful() throws Exception {
-        List<Employee> givenEmployees = employeeRepository.getAll();
-
-
         Employee newEmployee = new Employee(1, "ABC", 40, "Male", 70000.0, true);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -137,7 +124,6 @@ public class EmployTest {
                 .content(objectMapper.writeValueAsString(newEmployee)));
 
         perform.andExpect(MockMvcResultMatchers.status().isOk());
-
 
         ResultActions perform_second = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/1"));
         perform_second.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("ABC"));

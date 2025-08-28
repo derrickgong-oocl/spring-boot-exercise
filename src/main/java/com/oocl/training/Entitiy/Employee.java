@@ -1,6 +1,12 @@
 package com.oocl.training.Entitiy;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "employees")
 public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private int age;
@@ -15,6 +21,7 @@ public class Employee {
     public void setActive(boolean active) {
         this.active = active;
     }
+
 
     public Employee(int id, String name, int age, String gender, double salary, boolean active) {
         this.id = id;

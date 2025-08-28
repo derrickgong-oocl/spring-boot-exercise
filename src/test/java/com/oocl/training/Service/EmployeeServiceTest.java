@@ -1,8 +1,8 @@
 package com.oocl.training.Service;
 
-import ch.qos.logback.core.testUtil.MockInitialContext;
 import com.oocl.training.Entitiy.Employee;
-import com.oocl.training.Repository.EmployeeRepository;
+import com.oocl.training.Repository.EmployeeDbRepository;
+import com.oocl.training.Repository.EmployeeMemoryRepository;
 import com.oocl.training.exception.InvalidEmployeeException;
 import com.oocl.training.exception.InvalidUpdateException;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.verify;
 class EmployeeServiceTest {
 
     @Mock
-    private EmployeeRepository employeeRepository;
+    private EmployeeDbRepository employeeRepository;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -72,7 +71,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void should_throw_exception_when_update_successful() {
+    void is_ok_when_update_successful() {
         Employee employee = new Employee(1, "oocl", 20, "Male", 5000, true);
         Employee mockEmployee = new Employee(1, "John Smith", 32, "Male", 5000.0, true);
 
@@ -107,13 +106,34 @@ class EmployeeServiceTest {
         Employee mockEmployee = new Employee(1, "John Smith", 32, "Male", 5000.0, true);
         Mockito.when(employeeRepository.get(1)).thenReturn(mockEmployee);
 
-        assertEquals(mockEmployee.getName(), employee.getName());
-        assertEquals(mockEmployee.getAge(), employee.getAge());
-        assertEquals(mockEmployee.getSalary(), employee.getSalary());
-        assertEquals(mockEmployee.isActive(), employee.isActive());
-        assertEquals(mockEmployee.getGender(), employee.getGender());
+        Employee employeeTest = employeeService.getEmployeeById(1);
+
+        assertEquals(employeeTest.getName(), employee.getName());
+        assertEquals(employeeTest.getAge(), employee.getAge());
+        assertEquals(employeeTest.getSalary(), employee.getSalary());
+        assertEquals(employeeTest.isActive(), employee.isActive());
+        assertEquals(employeeTest.getGender(), employee.getGender());
 
    }
+
+
+    @Test
+    void get_employ_by_gender_successfully() {
+        Employee employee = new Employee(1, "John Smith", 32, "Male", 5000.0, true);
+
+
+        Mockito.when(employeeRepository.getAll()).thenReturn(List.of(employee,
+                new Employee(2, "Jane Johnson", 28, "Female", 6000.0, true),
+                new Employee(3, "David Williams", 35, "Male", 5500.0, true)));
+
+        List<Employee> genderList = employeeService.getEmployeeByGender("Male");
+
+        assertEquals(genderList.size(), 2);
+        assertEquals(genderList.get(0).getGender(), "Male");
+        assertEquals(genderList.get(1).getGender(), "Male");
+
+
+    }
 
 
 
