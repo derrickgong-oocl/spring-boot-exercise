@@ -73,8 +73,9 @@ public class EmployeeService {
     public Boolean deleteEmployee(Integer id) {
         List<Employee> allEmployees = employeeRepository.getAll();
         for (Employee employee : allEmployees) {
-            if (employee.getId() == id) {
+            if (employee.getId().equals(id)) {
                 employee.setActive(false);
+                employeeRepository.updateEmployee(employee.getId(), employee);
                 return true;
             }
         }

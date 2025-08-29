@@ -3,7 +3,6 @@ package com.oocl.training.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Repository.EmployeeDbRepository;
-import com.oocl.training.Repository.EmployeeMemoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,6 @@ public class EmployTest {
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].age").value(givenEmployees.get(0).getAge()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].gender").value(givenEmployees.get(0).getGender()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].salary").value(givenEmployees.get(0).getSalary()));
-        perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].companyId").value(givenEmployees.get(0).getCompanyId()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[1].id").value(givenEmployees.get(1).getId()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[2].id").value(givenEmployees.get(2).getId()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[3].id").value(givenEmployees.get(3).getId()));
@@ -77,8 +75,6 @@ public class EmployTest {
         ResultActions perform = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/gender").param("gender","Male"));
 
         perform.andExpect(MockMvcResultMatchers.status().isOk());
-
-
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].gender").value(givenEmployees.get(0).getGender()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[1].gender").value(givenEmployees.get(2).getGender()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[2].gender").value(givenEmployees.get(4).getGender()));
@@ -89,7 +85,7 @@ public class EmployTest {
     @Test
     public void post_employees_should_create_successfully() throws Exception {
         List<Employee> givenEmployees = employeeRepository.getAll();
-        Employee newEmployee = new Employee("Michael", 40, "Male", 70000.0, 1);
+        Employee newEmployee = new Employee("Michael", 40, "Male", 70000.0);
         givenEmployees.add(newEmployee);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -116,7 +112,7 @@ public class EmployTest {
 
     @Test
     public void put_employees_by_id_successful() throws Exception {
-        Employee newEmployee = new Employee(1, "ABC", 40, "Male", 70000.0, true, 1);
+        Employee newEmployee = new Employee(1, "ABC", 40, "Male", 70000.0, true);
 
         ObjectMapper objectMapper = new ObjectMapper();
         ResultActions perform = client.perform(MockMvcRequestBuilders

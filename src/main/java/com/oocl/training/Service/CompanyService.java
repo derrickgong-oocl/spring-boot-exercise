@@ -5,6 +5,7 @@ import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
 import com.oocl.training.Repository.CompanyDbRepository;
 import com.oocl.training.Repository.CompanyMemoryRepository;
+import com.oocl.training.Repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
 
@@ -14,7 +15,7 @@ import java.util.*;
 public class CompanyService {
 
 
-    private final CompanyDbRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
     public CompanyService(CompanyDbRepository companyRepository) {
         this.companyRepository = companyRepository;

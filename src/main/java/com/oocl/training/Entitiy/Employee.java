@@ -2,7 +2,6 @@ package com.oocl.training.Entitiy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -16,27 +15,39 @@ public class Employee {
     private String gender;
     private Double salary;
     private Boolean active;
-    private Integer companyId;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
 
 
-    public Employee(Integer id, String name, Integer age, String gender, Double salary, Boolean active, Integer companyId) {
+    public Employee(Integer id, String name, Integer age, String gender, Double salary, Boolean active) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.salary = salary;
         this.active = active;
-        this.companyId = companyId;
+
     }
 
-    public Employee(String name, Integer age, String gender, Double salary, Integer companyId) {
+    public Employee(String name, Integer age, String gender, Double salary) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.salary = salary;
         this.active = true;
-        this.companyId = companyId;
     }
 
     public Employee() {
@@ -83,13 +94,6 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
 
     public Boolean isActive() {
         return active;
@@ -98,4 +102,6 @@ public class Employee {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+
 }

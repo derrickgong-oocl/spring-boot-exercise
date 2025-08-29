@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Table(name = "companies")
+
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
