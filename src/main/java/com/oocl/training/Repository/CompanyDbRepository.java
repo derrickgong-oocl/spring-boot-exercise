@@ -2,10 +2,12 @@ package com.oocl.training.Repository;
 
 import com.oocl.training.Entitiy.Company;
 import com.oocl.training.Entitiy.Employee;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class CompanyDbRepository implements CompanyRepository {
 
     JpaCompanyRepository repository;

@@ -70,7 +70,7 @@ public class EmployeeService {
         return employeeRepository.addEmployee(employee);
     }
 
-    public boolean deleteEmployee(Integer id) {
+    public Boolean deleteEmployee(Integer id) {
         List<Employee> allEmployees = employeeRepository.getAll();
         for (Employee employee : allEmployees) {
             if (employee.getId() == id) {
@@ -81,7 +81,7 @@ public class EmployeeService {
         return false;
     }
 
-    public boolean updateEmployee(Integer id, Employee employee) {
+    public Boolean updateEmployee(Integer id, Employee employee) {
         if (!employee.isActive()) {
             throw new InvalidUpdateException("Inactive Employee can not be updated");
         }

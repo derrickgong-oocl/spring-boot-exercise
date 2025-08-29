@@ -18,13 +18,13 @@ public class CompanyMemoryRepository implements CompanyRepository{
 
     private final HashMap<Integer, Company> companyDB = new HashMap<>(Map.of(
             1, new Company(1, "Acme Corporation", List.of(
-                    new Employee(1, "John Smith", 32, "Male", 5000.0, true),
-                    new Employee(2, "Jane Johnson", 28, "Female", 6000.0, true)
+                    new Employee(1, "John Smith", 32, "Male", 5000.0, true, 1),
+                    new Employee(2, "Jane Johnson", 28, "Female", 6000.0, true, 1)
             )),
             2, new Company(2, "TechCom Solutions", List.of(
-                    new Employee(3, "David Williams", 35, "Male", 5500.0, true),
-                    new Employee(4, "Emily Brown", 23, "Female", 4500.0, true),
-                    new Employee(5, "Michael Jones", 40, "Male", 7000.0, true)
+                    new Employee(3, "David Williams", 35, "Male", 5500.0, true, 1),
+                    new Employee(4, "Emily Brown", 23, "Female", 4500.0, true, 1),
+                    new Employee(5, "Michael Jones", 40, "Male", 7000.0, true, 1)
             )),
             3, new Company(3, "Global Innovators", List.of()),
             4, new Company(4, "Stellar Enterprises", List.of()),

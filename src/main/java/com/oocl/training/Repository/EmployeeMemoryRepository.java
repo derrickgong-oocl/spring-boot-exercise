@@ -16,9 +16,9 @@ public class EmployeeMemoryRepository implements EmployeeRepository{
     public EmployeeMemoryRepository() {
 
     }
-    private final Map<Integer, Employee> employeeDB = new HashMap<>(Map.of(1, new Employee(1, "John Smith", 32, "Male", 5000.0, true),
-            2, new Employee(2, "Jane Johnson", 28, "Female", 6000.0, true),
-            3, new Employee(3, "David Williams", 35, "Male", 5500.0, true)
+    private final Map<Integer, Employee> employeeDB = new HashMap<>(Map.of(1, new Employee(1, "John Smith", 32, "Male", 5000.0, true, 1),
+            2, new Employee(2, "Jane Johnson", 28, "Female", 6000.0, true, 1),
+            3, new Employee(3, "David Williams", 35, "Male", 5500.0, true, 1)
     ));
 
     @Override
