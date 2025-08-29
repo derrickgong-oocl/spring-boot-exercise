@@ -16,7 +16,7 @@ public class EmployeeDbRepository implements EmployeeRepository {
 
     @Override
     public Employee get(Integer id) {
-        return repository.getReferenceById(id);
+        return repository.findById(id).get();
     }
 
     @Override

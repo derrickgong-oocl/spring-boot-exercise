@@ -3,6 +3,10 @@ package com.oocl.training.Controller;
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Page;
 import com.oocl.training.Service.EmployeeService;
+import com.oocl.training.dto.EmployeeRequest;
+import com.oocl.training.dto.EmployeeResponse;
+import com.oocl.training.mapper.EmployeeMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,36 +20,39 @@ import java.util.*;
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
 
-
+    private final EmployeeMapper employeeMapper;
     private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
         this.employeeService = employeeService;
+        this.employeeMapper = employeeMapper;
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Integer id) {
-        return employeeService.getEmployeeById(id);
+    public EmployeeResponse getEmployeeById(@PathVariable Integer id) {
+        return employeeMapper.toResponse(employeeService.getEmployeeById(id));
     }
 
     @GetMapping
-    public List<Employee> getEmployeeList() {
-        return employeeService.getEmployeeList();
+    public List<EmployeeResponse> getEmployeeList() {
+        return employeeMapper.toResponse(employeeService.getEmployeeList());
     }
 
     @GetMapping("/gender")
-    public List<Employee> getEmployeeByGender(@RequestParam String gender) {
-        return employeeService.getEmployeeByGender(gender);
+    public List<EmployeeResponse> getEmployeeByGender(@RequestParam String gender) {
+        return employeeMapper.toResponse(employeeService.getEmployeeByGender(gender));
     }
 
     @GetMapping("/page")
-    public Page<Employee> getEmployeesByPage(@RequestParam Integer page, @RequestParam Integer size) {
-        return employeeService.getEmployeesByPage(page, size);
+    public List<EmployeeResponse> getEmployeesByPage(@RequestParam Integer page, @RequestParam Integer size) {
+        return employeeMapper.toResponse(employeeService.getEmployeesByPage(page, size));
     }
 
     @PostMapping
-    public void addEmployee(@RequestBody Employee employee) {
-        employeeService.addEmployee(employee);
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeResponse addEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = employeeMapper.toRequest(employeeRequest);
+        return employeeMapper.toResponse(employeeService.addEmployee(employee));
     }
 
     @DeleteMapping("/{id}")
@@ -59,7 +66,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
+    public ResponseEntity<Void> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = employeeMapper.toRequest(employeeRequest);
         boolean response = employeeService.updateEmployee(id, employee);
         if (response) {
             return new ResponseEntity<>(HttpStatus.OK);

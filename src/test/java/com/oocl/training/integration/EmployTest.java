@@ -3,6 +3,7 @@ package com.oocl.training.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Repository.EmployeeDbRepository;
+import com.oocl.training.exception.InvalidEmployeeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,6 +37,21 @@ public class EmployTest {
 //        employeeRepository.addEmployee(new Employee("Michael", 40, "Male", 7000.0));
     }
 
+
+//    @Test
+//    public void should_throw_exception_when_add_under_eighteen() throws Exception {
+//        List<Employee> givenEmployees = employeeRepository.getAll();
+//        Employee newEmployee = new Employee("Michael", 10, "Male", 7000.0);
+//        givenEmployees.add(newEmployee);
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        assertThrows(InvalidEmployeeException.class, () -> client.perform(MockMvcRequestBuilders
+//                .post("/api/v1/employees")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(newEmployee))));
+//    }
+
     @Test
     public void should_return_employees_when_get_all_employees_exist() throws Exception {
         List<Employee> givenEmployees = employeeRepository.getAll();
@@ -44,7 +63,6 @@ public class EmployTest {
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].name").value(givenEmployees.get(0).getName()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].age").value(givenEmployees.get(0).getAge()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].gender").value(givenEmployees.get(0).getGender()));
-        perform.andExpect(MockMvcResultMatchers.jsonPath("$.[0].salary").value(givenEmployees.get(0).getSalary()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[1].id").value(givenEmployees.get(1).getId()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[2].id").value(givenEmployees.get(2).getId()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.[3].id").value(givenEmployees.get(3).getId()));
@@ -64,7 +82,7 @@ public class EmployTest {
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(givenEmployees.get(0).getName()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.age").value(givenEmployees.get(0).getAge()));
         perform.andExpect(MockMvcResultMatchers.jsonPath("$.gender").value(givenEmployees.get(0).getGender()));
-        perform.andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(givenEmployees.get(0).getSalary()));
+
 
     }
 
@@ -94,7 +112,7 @@ public class EmployTest {
                         .post("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newEmployee)));
-        perform.andExpect(MockMvcResultMatchers.status().isOk());
+        perform.andExpect(MockMvcResultMatchers.status().isCreated());
 
         ResultActions perform_second = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/6"));
         perform_second.andExpect(MockMvcResultMatchers.jsonPath("$.name").value(givenEmployees.get(5).getName()));
@@ -106,13 +124,13 @@ public class EmployTest {
         ResultActions perform = client.perform(MockMvcRequestBuilders.delete("/api/v1/employees/1"));
 
         perform.andExpect(MockMvcResultMatchers.status().isNoContent());
-        ResultActions perform_second = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/1"));
-        perform_second.andExpect(MockMvcResultMatchers.jsonPath("$.active").value(false));
+        Employee employee = employeeRepository.get(1);
+        assertEquals(employee.isActive(), Boolean.FALSE);
     }
 
     @Test
     public void put_employees_by_id_successful() throws Exception {
-        Employee newEmployee = new Employee(1, "ABC", 40, "Male", 70000.0, true);
+        Employee newEmployee = new Employee(1,"ABC", 40, "Male", 70000.0, true);
 
         ObjectMapper objectMapper = new ObjectMapper();
         ResultActions perform = client.perform(MockMvcRequestBuilders
@@ -125,6 +143,8 @@ public class EmployTest {
         ResultActions perform_second = client.perform(MockMvcRequestBuilders.get("/api/v1/employees/1"));
         perform_second.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("ABC"));
     }
+
+
 
 
 
