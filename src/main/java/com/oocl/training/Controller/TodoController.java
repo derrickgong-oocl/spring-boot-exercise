@@ -31,7 +31,7 @@ public class TodoController {
     }
 
 
-    @PostMapping("/todos")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void saveTodo(@Valid @RequestBody TodoRequest todoRequest) {
         todoService.addTodo(todoMapper.toResponse(todoRequest));
@@ -66,7 +66,5 @@ public class TodoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 
 }

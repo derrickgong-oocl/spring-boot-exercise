@@ -42,7 +42,6 @@ public class TodoDbRepository implements TodoRepository {
         toupdate.setId(todo.getId());
         toupdate.setStatus(todo.getStatus());
         toupdate.setTitle(todo.getTitle());
-        repository.deleteById(id);
         repository.save(toupdate);
     }
 }
