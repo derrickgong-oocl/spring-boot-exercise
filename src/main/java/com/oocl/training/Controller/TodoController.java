@@ -11,7 +11,7 @@ import java.util.Map;
 
 // post http://localhost:8080/api/v1/todos
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/todos")
 
 public class TodoController {
     private final Map<Integer, Todo> db = new HashMap<>();

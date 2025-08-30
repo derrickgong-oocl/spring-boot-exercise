@@ -1,16 +1,24 @@
 package com.oocl.training.Entitiy;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@Table(name = "todo")
 public class Todo {
 
     private String title;
-    private int id;
+    private Integer id;
     private String status;
 
     public Todo() {
 
     }
 
-    public Todo(String titles, int id, String status) {
+    public Todo(Integer id, String titles, String status) {
         this.status = status;
         this.id = id;
         this.title = titles;

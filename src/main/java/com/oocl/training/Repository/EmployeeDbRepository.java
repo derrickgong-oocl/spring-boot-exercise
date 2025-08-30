@@ -38,6 +38,7 @@ public class EmployeeDbRepository implements EmployeeRepository {
         toupdate.setName(employee.getName());
         toupdate.setGender(employee.getGender());
         toupdate.setActive(employee.isActive());
+        repository.deleteById(id);
         repository.save(toupdate);
     }
 
