@@ -47,7 +47,7 @@ public class TodoController {
         return todoService.getTodoById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Void> updataTodo(@PathVariable Integer id, @RequestBody Todo todo) {
         boolean response = todoService.updateTodo(id, todo);
         if (response) {
@@ -57,7 +57,7 @@ public class TodoController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Integer id) {
         boolean response = todoService.deleteTodo(id);
         if (response) {
