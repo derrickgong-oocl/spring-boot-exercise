@@ -25,6 +25,11 @@ public class Todo {
         this.title = titles;
     }
 
+    public Todo(String titles, String status) {
+        this.status = status;
+        this.title = titles;
+    }
+
 
     public String getTitle() {
         return title;

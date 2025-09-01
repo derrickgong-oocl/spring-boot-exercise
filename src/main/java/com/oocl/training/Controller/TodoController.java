@@ -4,7 +4,9 @@ import com.oocl.training.Entitiy.Employee;
 import com.oocl.training.Entitiy.Todo;
 import com.oocl.training.Service.TodoService;
 import com.oocl.training.dto.EmployeeRequest;
+import com.oocl.training.dto.EmployeeResponse;
 import com.oocl.training.dto.TodoRequest;
+import com.oocl.training.dto.TodoResponse;
 import com.oocl.training.mapper.TodoMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,8 +35,9 @@ public class TodoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveTodo(@Valid @RequestBody TodoRequest todoRequest) {
-        todoService.addTodo(todoMapper.toResponse(todoRequest));
+    public TodoResponse saveTodo(@Valid @RequestBody TodoRequest todoRequest) {
+        Todo todo = todoMapper.toRequest(todoRequest);
+        return todoMapper.toResponse(todoService.addTodo(todo));
     }
 
     @GetMapping
@@ -65,6 +68,11 @@ public class TodoController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/page")
+    public List<TodoResponse> getTodosByPage(@RequestParam Integer page, @RequestParam Integer size) {
+        return todoMapper.toResponse(todoService.getTodoByPage(page, size));
     }
 
 }
