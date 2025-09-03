@@ -16,3 +16,11 @@ CREATE TABLE companies
  name VARCHAR(255),
  PRIMARY KEY (id)
 );
+
+
+CREATE TABLE todo (
+id BIGINT NOT NULL AUTO_INCREMENT,
+status VARCHAR(255),
+title VARCHAR(255),
+PRIMARY KEY (id)
+);

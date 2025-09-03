@@ -12,3 +12,7 @@ INSERT INTO companies (id, name)
 VALUES (1, 'Acme Corporation'), (2, 'TechCom Solutions'),
  (3, 'Global Innovators'), (4, 'Stellar Enterprises'),
  (5, 'Nexus Industries');
+INSERT INTO todo (id, status, title)
+VALUES (1, 'active', 'A'),
+      (2, 'active', 'B'),
+      (3, 'active', 'C');
