@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoService {
@@ -34,6 +35,7 @@ public class TodoService {
 
     public Page<Todo> getTodoByPage(Integer page, Integer size) {
         List<Todo> allTodos = getAll();
+        allTodos =  allTodos.stream().filter(todo -> todo.getStatus().equals("active")).collect(Collectors.toList());
         int totalCount = allTodos.size();
         int startIndex = (page - 1) * size;
         if (startIndex >= totalCount) {
