@@ -12,9 +12,9 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: mydb
-          MYSQL_USER: myuser
-          MYSQL_PASSWORD: mypassword
+          MYSQL_DATABASE: test
+          MYSQL_USER: root
+          MYSQL_PASSWORD: secret
         ports:
           - 3306:3306
         options: >-
@@ -51,9 +51,9 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/mydb" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_USERNAME=myuser" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_PASSWORD=mypassword" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/test" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=root" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=secret" >> $GITHUB_ENV
 
       - name: Wait for MySQL
         run: |
@@ -64,6 +64,8 @@ jobs:
           done
 
       - name: Run tests
+        env:
+          SPRING_PROFILES_ACTIVE: test
         run: mvn clean test
 
       #      - name: analyze with SonarQube
